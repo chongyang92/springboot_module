@@ -1,5 +1,5 @@
 # springboot_model分为多个模块
-## uid-generator模块
+## 0.uid-generator模块
     **_全局唯一ID生成器_**
     1. 介绍详见 https://github.com/baidu/uid-generator/blob/master/README.zh_cn.md
     2. 集成到springboot中详见 https://www.jianshu.com/p/947bff7be2da
