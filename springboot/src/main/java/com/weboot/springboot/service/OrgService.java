@@ -1,9 +1,11 @@
 package com.weboot.springboot.service;
 
-import com.weboot.springboot.model.Org;
+import com.weboot.springboot.domain.Org;
 
 import java.util.List;
 
 public interface OrgService {
     List<Org> getOrglist();
+    String insertOrg(Org org);
+    String editOrg(Org org);
 }
