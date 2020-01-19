@@ -23,13 +23,9 @@ public class OrgController {
 
     @Resource
     private OrgService orgService;
-    @Resource
-    private UidGenerator uidGenerator;
 
     @RequestMapping(value = "/list",method = RequestMethod.POST)
     public List<Org> listOrg(@RequestBody OrgValidator orgValidator, BindingResult bindingResult){
-
-        //System.out.println(uidGenerator.getUID());
 
         return orgService.getOrglist();
     }

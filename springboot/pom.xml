@@ -70,7 +70,12 @@
             <artifactId>uid-generator</artifactId>
             <version>1.0.0</version>
         </dependency>
-
+        <!--阿里 FastJson依赖 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.62</version>
+        </dependency>
     </dependencies>
 
     <build>

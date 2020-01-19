@@ -67,3 +67,14 @@
     深拷贝与浅拷贝https://blog.csdn.net/weixin_33889245/article/details/92531051
     bean拷贝，各工具对比https://blog.csdn.net/Nirrvana0722/article/details/90600690
     beanCopier的使用https://blog.csdn.net/qq_32317661/article/details/84393465
+### 2.5使用mybatis-generator时生成多余的类（***WithBLOBs和***Key）或发现生成的*Mapper类中缺少方法（byPrimaryKey）
+    原因是在mybatis-generator看来mysql中没有catalog和schema的层级概念，全是平等的数据库，当自己的库中表名和mysql自带的库中表名重名了，
+    可能会先找到mysql自带的表进行生成相关Java类，
+    建议：对自动生成的相关Java类进行检查
+    详细分析https://www.jianshu.com/p/dbeeac29ff27 看评论
+    官方建议http://www.mybatis.org/generator/usage/mysql.html
+### 2.6使用fastjson指定序列化方式重写toString方法
+    使用fastjson的JSON.toJSONString来重写于其他系统交互时传递的core类里的toString方法
+    引入fastjson
+    使用注意事项https://segmentfault.com/a/1190000021287520 把常用序列化属性都写上了
+    
