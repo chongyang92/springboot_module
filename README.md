@@ -77,4 +77,8 @@
     使用fastjson的JSON.toJSONString来重写于其他系统交互时传递的core类里的toString方法
     引入fastjson
     使用注意事项https://segmentfault.com/a/1190000021287520 把常用序列化属性都写上了
+### 2.7通过jad反编译工具理解枚举
+    深入理解枚举https://blog.csdn.net/javazejian/article/details/71333103
+    安装jad 步骤文档：jad配置到idea的external tools中.note
+            链接：http://note.youdao.com/noteshare?id=f5d5406f86510343f233d6afd8e99f14&sub=B6961BE8556B43CD9E9672B418FBC369
     

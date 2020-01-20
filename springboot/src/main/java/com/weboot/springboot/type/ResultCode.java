@@ -1,11 +1,15 @@
 package com.weboot.springboot.type;
 
 public enum ResultCode {
-    SUCCESS(0),
-    FAIL(500);
-
+    SUCCESS(200),
+    FAIL(400),
+    NOT_FOUND(404);
     private int code;
-    private ResultCode(int code) {
+    ResultCode(int code){
         this.code = code;
+    }
+
+    public int getCode() {
+        return code;
     }
 }
