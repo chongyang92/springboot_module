@@ -81,4 +81,12 @@
     深入理解枚举https://blog.csdn.net/javazejian/article/details/71333103
     安装jad 步骤文档：jad配置到idea的external tools中.note
             链接：http://note.youdao.com/noteshare?id=f5d5406f86510343f233d6afd8e99f14&sub=B6961BE8556B43CD9E9672B418FBC369
+### 2.8自定义异常及异常全局处理
+    自定义异常及捕获：
+        1)自定义一个异常类ServiceException，需要继承RuntimeException
+        2)使用全局异常进行捕获GlobalExceptionHandler
+        3)在impl实现类的方法中抛出异常(最好携带异常信息)
+    在2.5mybatis-generator中提到全局异常处理，使用@ControllerAdvice声明本类为全局异常处理类(全局异常捕捉处理器)， @ExceptionHandler指定异常类的类对象，@ResponseStatus指定异常返回状态(通常为OK，为了正确显示异常提示信息)
+    异常全局处理https://sq.163yun.com/blog/article/187288338344722432
+    完整的自定义异常设计https://blog.csdn.net/winy_lm/article/details/51064320     
     

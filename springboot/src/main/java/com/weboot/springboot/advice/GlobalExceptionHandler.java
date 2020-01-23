@@ -1,5 +1,6 @@
 package com.weboot.springboot.advice;
 
+import com.weboot.springboot.execption.ServiceException;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,7 +74,11 @@ public class GlobalExceptionHandler {
         return msg;
     }
 
-
+    @ExceptionHandler(value = ServiceException.class)
+    @ResponseStatus(value = HttpStatus.OK)
+    public String handleServiceException(ServiceException e){
+        return e.getMessage();
+    }
 
 
 }
