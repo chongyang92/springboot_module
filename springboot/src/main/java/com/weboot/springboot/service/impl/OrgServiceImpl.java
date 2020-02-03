@@ -1,4 +1,4 @@
-package com.weboot.springboot.serviceImpl;
+package com.weboot.springboot.service.impl;
 
 import com.baidu.fsg.uid.UidGenerator;
 import com.weboot.springboot.execption.ServiceException;
@@ -21,11 +21,23 @@ public class OrgServiceImpl implements OrgService {
     private UidGenerator uidGenerator;
 
     @Override
-    public List<Org> getOrglist() {
+    public List<Org> getOrglist(Org org) {
 
         OrgExample orgExample = new OrgExample();
         OrgExample.Criteria cc = orgExample.createCriteria();
-        cc.andOrgIdIsNotNull();
+        if (StringUtils.isNotBlank(org.getOrgId())){
+            cc.andOrgIdEqualTo(org.getOrgId());
+        }
+        if(StringUtils.isNotBlank(org.getOrgName())){
+            cc.andOrgNameLike("%"+org.getOrgName() +"%");
+        }
+        if (StringUtils.isNotBlank(org.getParentOrgId())){
+            cc.andParentOrgIdEqualTo(org.getParentOrgId());
+        }
+        if (StringUtils.isNotBlank(org.getRealOrgId())){
+            cc.andRealOrgIdLike("%" + org.getRealOrgId() + "%");
+        }
+
         return orgMapper.selectByExample(orgExample);
     }
 

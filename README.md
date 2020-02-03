@@ -89,4 +89,29 @@
     在2.5mybatis-generator中提到全局异常处理，使用@ControllerAdvice声明本类为全局异常处理类(全局异常捕捉处理器)， @ExceptionHandler指定异常类的类对象，@ResponseStatus指定异常返回状态(通常为OK，为了正确显示异常提示信息)
     异常全局处理https://sq.163yun.com/blog/article/187288338344722432
     完整的自定义异常设计https://blog.csdn.net/winy_lm/article/details/51064320     
+### 2.9引入java第2库 commons-lang3 (commons-long已经过时，springframework是提供给spring用的)
+    主要使用该库的StringUtils工具类https://blog.csdn.net/f641385712/article/details/82469877
+    其他工具类介绍https://blog.csdn.net/f641385712/article/details/82468927
+### 2.10自定义业务异常ServiceException
+
+### 2.11jackson和fastjson,都是json工具包，能实现Java对象和json串相互转换
+
+    调用方便性而言：
+    。FastJSON提供了大量静态方法，调用简洁方便
+    。Jackson须实例化类，调用相对繁琐，可通过封装成JSON工具类简化调用
+ 
+    性能而言：
+    。FastJSON反序列化的性能略差，对于256k的json字符串，平均700ms
+    。Jackson 的 data binding反序列化的性能稍好，对于256k的json字符串，平均600ms
+    。两者的序列化性能基本相同，对于256k的json字符串，平均140ms
+    。相对data binding方式（ObjectMapper.writeValueAsString()），Jackson的流输出方式（JsonGenerator.writeObject()）性能稍好，平均130ms
+    jackson是spring boot start web会自动引入https://www.jianshu.com/p/b804874b7a69
+### 2.12序列化和反序列化
+    含义：序列化——对内存中对象进行freeze冻结，
+        1).存储到本地磁盘
+        2).远程传输到另一台机器
+    反序列化——对读/收到的已被序列化的对象
+        1).解析到对应数据结构的内存中
+        2).解析成对应结构的对象
+
     
