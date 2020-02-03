@@ -1,4 +1,4 @@
-package com.weboot.springboot.execption;
+package com.weboot.springboot.exception;
 
 public class ServiceException extends RuntimeException {
 

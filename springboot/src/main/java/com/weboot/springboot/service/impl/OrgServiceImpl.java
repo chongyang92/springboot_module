@@ -1,7 +1,7 @@
 package com.weboot.springboot.service.impl;
 
 import com.baidu.fsg.uid.UidGenerator;
-import com.weboot.springboot.execption.ServiceException;
+import com.weboot.springboot.exception.ServiceException;
 import com.weboot.springboot.mapper.OrgMapper;
 import com.weboot.springboot.domain.Org;
 import com.weboot.springboot.domain.OrgExample;
