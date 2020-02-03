@@ -1,5 +1,6 @@
 package com.weboot.springboot.controller.param;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.weboot.springboot.domain.Org;
 import com.weboot.springboot.utils.BeanCopierUtils;
 import org.hibernate.validator.constraints.Length;
@@ -15,6 +16,7 @@ public class OrgValidator {
 
     @NotBlank(message = "{orgValidator.parentOrgId.notBlank}")
     @Length(min = 0, max = 50, message = "{orgValidator.parentOrgId.length}")
+    @JsonProperty
     private String parentOrgId;
 
     @NotBlank(message = "{orgValidator.realOrgId.notBlank}")

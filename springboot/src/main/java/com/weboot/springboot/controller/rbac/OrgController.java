@@ -27,7 +27,8 @@ public class OrgController {
     @RequestMapping(value = "/list",method = RequestMethod.POST)
     public List<Org> listOrg(@RequestBody OrgValidator orgValidator, BindingResult bindingResult){
 
-        return orgService.getOrglist();
+        Org org = orgValidator.genOrg();
+        return orgService.getOrglist(org);
     }
 
     @RequestMapping(value = "/create",method = RequestMethod.POST)
