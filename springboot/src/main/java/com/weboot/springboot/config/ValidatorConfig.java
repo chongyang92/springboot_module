@@ -8,7 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import javax.validation.Validator;
-//https://blog.csdn.net/GAOXINXINGgaoxinxing/article/details/92642470
+//validate和messages消息加载机制及国际化解决方案
+// https://blog.csdn.net/GAOXINXINGgaoxinxing/article/details/92642470
 @Configuration
 public class ValidatorConfig {
 

@@ -74,7 +74,7 @@
     详细分析https://www.jianshu.com/p/dbeeac29ff27 看评论
     官方建议http://www.mybatis.org/generator/usage/mysql.html
 ### 2.6使用fastjson指定序列化方式重写toString方法
-    使用fastjson的JSON.toJSONString来重写于其他系统交互时传递的core类里的toString方法
+    使用fastjson的JSON.toJSONString来重写与其他系统交互时传递的core类里的toString方法
     引入fastjson
     使用注意事项https://segmentfault.com/a/1190000021287520 把常用序列化属性都写上了
 ### 2.7通过jad反编译工具理解枚举
@@ -113,5 +113,6 @@
     反序列化——对读/收到的已被序列化的对象
         1).解析到对应数据结构的内存中
         2).解析成对应结构的对象
+### 2.13使用common-codec的加密工具类DigestUtils
 
     

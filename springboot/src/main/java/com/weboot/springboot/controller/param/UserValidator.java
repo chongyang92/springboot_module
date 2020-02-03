@@ -1,9 +1,21 @@
 package com.weboot.springboot.controller.param;
 
+import com.weboot.springboot.domain.User;
+import com.weboot.springboot.utils.BeanCopierUtils;
+
 public class UserValidator {
+    private String userId;
     private String userName;
     private String password;
     private String orgId;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getUserName() {
         return userName;
@@ -27,5 +39,11 @@ public class UserValidator {
 
     public void setOrgId(String orgId) {
         this.orgId = orgId;
+    }
+
+    public User genUser(){
+        User user = new User();
+        BeanCopierUtils.copyProperties(this,user);
+        return user;
     }
 }
