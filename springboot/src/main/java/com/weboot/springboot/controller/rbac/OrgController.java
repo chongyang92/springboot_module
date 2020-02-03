@@ -48,4 +48,11 @@ public class OrgController {
 
         return org.toString();
     }
+
+    @RequestMapping(value = "/delete",method = RequestMethod.POST)
+    public String deleteOrg(@RequestBody OrgValidator orgValidator, BindingResult bindingResult){
+
+        Org org = orgValidator.genOrg();
+        return orgService.deleteOrg(org.getOrgId());
+    }
 }

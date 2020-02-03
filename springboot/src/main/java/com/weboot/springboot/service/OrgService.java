@@ -8,4 +8,5 @@ public interface OrgService {
     List<Org> getOrglist();
     String insertOrg(Org org);
     String editOrg(Org org);
+    String deleteOrg(String orgId);
 }

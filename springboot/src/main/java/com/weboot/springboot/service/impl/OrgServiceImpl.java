@@ -1,4 +1,4 @@
-package com.weboot.springboot.serviceImpl;
+package com.weboot.springboot.service.impl;
 
 import com.baidu.fsg.uid.UidGenerator;
 import com.weboot.springboot.execption.ServiceException;
@@ -44,6 +44,14 @@ public class OrgServiceImpl implements OrgService {
     @Override
     public String editOrg(Org org) {
         orgMapper.updateByPrimaryKeySelective(org);
-        return null;
+        return org.getOrgName();
+    }
+
+    @Override
+    public String deleteOrg(String orgId) {
+        if(1 != orgMapper.deleteByPrimaryKey(orgId)){
+            throw new ServiceException("删除机构失败");
+        }
+        return orgId;
     }
 }
