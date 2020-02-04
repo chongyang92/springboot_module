@@ -41,10 +41,10 @@
             <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />
         </table>-->
 
-        <!--<table tableName="org" domainObjectName="Org"/>
+        <table tableName="org" domainObjectName="Org"/>
         <table tableName="user" domainObjectName="User"/>
         <table tableName="menu" domainObjectName="Menu"/>
-        <table tableName="path" domainObjectName="Path"/>-->
+        <table tableName="path" domainObjectName="Path"/>
         <table tableName="user_menu" domainObjectName="UserMenu"/>
         <table tableName="user_path" domainObjectName="UserPath"/>
 

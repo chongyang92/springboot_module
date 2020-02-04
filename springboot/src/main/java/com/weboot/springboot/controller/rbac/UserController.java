@@ -1,9 +1,14 @@
 package com.weboot.springboot.controller.rbac;
 
+import com.weboot.springboot.controller.param.UserMenuValidator;
+import com.weboot.springboot.controller.param.UserPathValidator;
 import com.weboot.springboot.controller.param.UserValidator;
 import com.weboot.springboot.core.Result;
 import com.weboot.springboot.core.ResultBuilder;
-import com.weboot.springboot.domain.User;
+import com.weboot.springboot.domain.*;
+import com.weboot.springboot.exception.ServiceException;
+import com.weboot.springboot.service.UserMenuService;
+import com.weboot.springboot.service.UserPathService;
 import com.weboot.springboot.service.UserService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
@@ -27,6 +32,12 @@ public class UserController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private UserMenuService userMenuService;
+
+    @Resource
+    private UserPathService userPathService;
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public Result listUser(@RequestBody UserValidator userValidator, BindingResult bindingResult) {
@@ -65,10 +76,85 @@ public class UserController {
         return ResultBuilder.genSuccessResult();
     }
 
-    /*@RequestMapping(value = "/addMenus", method = RequestMethod.POST)
-    public Result addMenus(@RequestBody ){
+    /**
+     * 新增用户与菜单关系
+     * @param userMenuValidator
+     * @param bindingResult
+     * @return
+     */
+    @RequestMapping(value = "/addMenus", method = RequestMethod.POST)
+    public Result addMenus(@RequestBody UserMenuValidator userMenuValidator,BindingResult bindingResult){
+        List<UserMenuKey> userMenuKeyList = userMenuValidator.genUserMenuKey();
+        //对于list需要判断是否为空指针并且是否有值
+        if(userMenuKeyList != null && !userMenuKeyList.isEmpty()) {
+            for(UserMenuKey userMenuKey : userMenuKeyList){
+                userMenuService.insertUserMenu(userMenuKey);
+            }
+        }else {
+            throw new ServiceException("用户与菜单对应关系不能为空");
+        }
+        return ResultBuilder.genSuccessResult();
+    }
 
-    }*/
+    @RequestMapping(value = "/listMenus", method = RequestMethod.POST)
+    public Result listMenus(@RequestBody UserMenuValidator userMenuValidator,BindingResult bindingResult){
+        List<Menu> menuList = userMenuService.listMenuByUserId(userMenuValidator.getUserId());
+        return ResultBuilder.genSuccessResult(menuList);
+    }
+
+    @RequestMapping(value = "/deleteMenus", method = RequestMethod.POST)
+    public Result deleteMenus(@RequestBody UserMenuValidator userMenuValidator,BindingResult bindingResult){
+        List<UserMenuKey> userMenuKeyList = userMenuValidator.genUserMenuKey();
+        //对于list需要判断是否为空指针并且是否有值
+        if(userMenuKeyList != null && !userMenuKeyList.isEmpty()) {
+            for(UserMenuKey userMenuKey : userMenuKeyList){
+                userMenuService.deleteUserMenu(userMenuKey);
+            }
+        }else {
+            throw new ServiceException("无此用户与菜单对应关系");
+        }
+        return ResultBuilder.genSuccessResult();
+    }
+
+    /**
+     * 新增用户与路径关系
+     * @param userPathValidator
+     * @param bindingResult
+     * @return
+     */
+    @RequestMapping(value = "/addPaths", method = RequestMethod.POST)
+    public Result addPaths(@RequestBody UserPathValidator userPathValidator, BindingResult bindingResult){
+        List<UserPathKey> userPathKeyList = userPathValidator.genUserPathKey();
+        //对于list需要判断是否为空指针并且是否有值
+        if(userPathKeyList != null && !userPathKeyList.isEmpty()) {
+            for(UserPathKey userPathKey : userPathKeyList){
+                userPathService.insertUserPath(userPathKey);
+            }
+        }else {
+            throw new ServiceException("用户与路径对应关系不能为空");
+        }
+        return ResultBuilder.genSuccessResult();
+    }
+
+    @RequestMapping(value = "/listPaths", method = RequestMethod.POST)
+    public Result listPaths(@RequestBody UserPathValidator userPathValidator,BindingResult bindingResult){
+        List<Path> pathList = userPathService.listPathByUserId(userPathValidator.getUserId());
+        return ResultBuilder.genSuccessResult(pathList);
+    }
+
+    @RequestMapping(value = "/deletePaths", method = RequestMethod.POST)
+    public Result deletePaths(@RequestBody UserPathValidator userPathValidator,BindingResult bindingResult){
+        List<UserPathKey> userPathKeyList = userPathValidator.genUserPathKey();
+        //对于list需要判断是否为空指针并且是否有值
+        if(userPathKeyList != null && !userPathKeyList.isEmpty()) {
+            for(UserPathKey userPathKey : userPathKeyList){
+                userPathService.deleteUserPath(userPathKey);
+            }
+        }else {
+            throw new ServiceException("无此用户与路径对应关系");
+        }
+        return ResultBuilder.genSuccessResult();
+    }
 }
 
 
