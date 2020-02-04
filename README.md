@@ -67,7 +67,7 @@
     深拷贝与浅拷贝https://blog.csdn.net/weixin_33889245/article/details/92531051
     bean拷贝，各工具对比https://blog.csdn.net/Nirrvana0722/article/details/90600690
     beanCopier的使用https://blog.csdn.net/qq_32317661/article/details/84393465
-### 2.5使用mybatis-generator时生成多余的类（***WithBLOBs和***Key）或发现生成的*Mapper类中缺少方法（byPrimaryKey）
+### 2.5使用mybatis-generator时生成多余的类（***WithBLOBs）或发现生成的*Mapper类中缺少方法（byPrimaryKey）
     原因是在mybatis-generator看来mysql中没有catalog和schema的层级概念，全是平等的数据库，当自己的库中表名和mysql自带的库中表名重名了，
     可能会先找到mysql自带的表进行生成相关Java类，
     建议：对自动生成的相关Java类进行检查
@@ -115,4 +115,12 @@
         2).解析成对应结构的对象
 ### 2.13使用common-codec的加密工具类DigestUtils
 
+### 2.14再谈mybatis-generator自动生成POJO、***Mapper及***mapper.xml
+    对于多模块中某一模块想使用mybatis-generator：
+        例，多模块springboot_module中某一模块springboot要使用mybatis-generator
+        应该将模块springboot模块中pom.xml里相关引入另一模块的dependency注掉(如果groupId、artifactId、version在maven中央仓库找不到的话)
+        不然会报错。
+    对于要生成的数据库表中字段都是主键，会生成以Key为结尾的POJO，使用即可。
+    对于生成***WithBLOBs.java文件，在generatorConfig.xml中jdbcConnection标签添加<property name="nullCatalogMeansCurrent" value="true" />即可
+    
     

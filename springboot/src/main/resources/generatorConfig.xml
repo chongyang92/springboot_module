@@ -5,7 +5,7 @@
 
 <generatorConfiguration>
     <!--本机驱动地址-->
-    <classPathEntry location="D:\localRepository\mysql\mysql-connector-java\8.0.18\mysql-connector-java-8.0.18.jar" />
+    <classPathEntry location="D:\newmavenLocalRepo\mysql\mysql-connector-java\8.0.18\mysql-connector-java-8.0.18.jar" />
 
     <context id="MYSQLTables" targetRuntime="MyBatis3">
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
@@ -41,10 +41,12 @@
             <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />
         </table>-->
 
-        <table tableName="org" domainObjectName="Org"/>
+        <!--<table tableName="org" domainObjectName="Org"/>
         <table tableName="user" domainObjectName="User"/>
         <table tableName="menu" domainObjectName="Menu"/>
-        <table tableName="path" domainObjectName="Path"/>
+        <table tableName="path" domainObjectName="Path"/>-->
+        <table tableName="user_menu" domainObjectName="UserMenu"/>
+        <table tableName="user_path" domainObjectName="UserPath"/>
 
     </context>
 </generatorConfiguration>

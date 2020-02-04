@@ -64,6 +64,11 @@ public class UserController {
         userService.deleteUser(user.getUserId());
         return ResultBuilder.genSuccessResult();
     }
+
+    /*@RequestMapping(value = "/addMenus", method = RequestMethod.POST)
+    public Result addMenus(@RequestBody ){
+
+    }*/
 }
 
 
