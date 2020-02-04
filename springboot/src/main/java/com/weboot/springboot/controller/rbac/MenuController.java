@@ -1,5 +1,6 @@
 package com.weboot.springboot.controller.rbac;
 
+import com.alibaba.fastjson.JSON;
 import com.weboot.springboot.controller.param.MenuValidator;
 import com.weboot.springboot.core.Result;
 import com.weboot.springboot.core.ResultBuilder;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Validated
@@ -32,6 +35,13 @@ public class MenuController {
 
         Menu menu = menuValidator.genMenu();
         List<Menu> menuList = menuService.getMenulist(menu);
+
+        //测试fastjson的filter对value为null是否生效,是否转为""返回给前端了
+        /*Map<String,String> map = new HashMap<>();
+        map.put("1","2");
+        map.put("3",null);
+        return ResultBuilder.genSuccessResult(map);*/
+        //测试fastjson的WriteNullStringAsEmpty是否生效，是否将null值，转为""
         Menu menu1 = new Menu();
         menu1.setMenuId("123");
         menu1.setMenuName(null);

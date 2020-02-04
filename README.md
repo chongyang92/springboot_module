@@ -122,5 +122,10 @@
         不然会报错。
     对于要生成的数据库表中字段都是主键，会生成以Key为结尾的POJO，使用即可。
     对于生成***WithBLOBs.java文件，在generatorConfig.xml中jdbcConnection标签添加<property name="nullCatalogMeansCurrent" value="true" />即可
-    
+### 2.15 配置fastjson作为与前端的消息转换器
+    WebMvcConfigurerAdapter过时的替换方法 https://blog.csdn.net/tyvbpq/article/details/83588508
+    Fastjson的配置类WebMvcConfig,及fastjson不生效问题 https://segmentfault.com/a/1190000015975405
+    为什么设置了SerializerFeature.WriteNullStringAsEmpty，fastjson字段为null时不输出空字符串？ https://blog.csdn.net/u012534163/article/details/88741884
+    具体配置详见WebMvcConfig.java的configureMessageConverters及filter-process
+    测试方法见/menu/list接口，分别用map和menu对象进行测试，是否将null处理成了""
     
