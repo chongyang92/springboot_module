@@ -9,4 +9,5 @@ public interface OrgService {
     String insertOrg(Org org);
     String editOrg(Org org);
     String deleteOrg(String orgId);
+    Org listOrgByOrgId(String orgId);
 }

@@ -1,17 +1,22 @@
 package com.weboot.springboot.config;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializeFilter;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.ValueFilter;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.weboot.springboot.config.intercepors.LoginInterceptor;
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.annotation.Resource;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -23,6 +28,9 @@ import java.util.Map;
 //不会影响到Spring Boot自身的@EnableAutoConfiguration
 public class WebMvcConfig implements WebMvcConfigurer {
     private static final Logger logger = LoggerFactory.getLogger(WebMvcConfig.class);
+
+    @Resource
+    private LoginInterceptor loginInterceptor;
 
     private static ValueFilter filter = new ValueFilter() {
         @Override
@@ -44,11 +52,16 @@ public class WebMvcConfig implements WebMvcConfigurer {
         Map<Class<?>, SerializeFilter> classSerializeFilterMap = new HashedMap();
         classSerializeFilterMap.put(Map.class,filter);
         config.setClassSerializeFilters(classSerializeFilterMap);
-
+        config.setDateFormat("yyyy-MM-dd HH:mm:ss");
         converter.setFastJsonConfig(config);
         converter.setDefaultCharset(StandardCharsets.UTF_8);
         converters.add(0,converter);
     }
 
-
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        // addPathPatterns("/**") 表示拦截所有的请求，
+        // excludePathPatterns("/login", "/register") 表示除了登陆与注册之外，因为登陆注册不需要登陆也可以访问
+        registry.addInterceptor(loginInterceptor).addPathPatterns("/**").excludePathPatterns("/login","/logout");
+    }
 }

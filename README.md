@@ -128,4 +128,14 @@
     为什么设置了SerializerFeature.WriteNullStringAsEmpty，fastjson字段为null时不输出空字符串？ https://blog.csdn.net/u012534163/article/details/88741884
     具体配置详见WebMvcConfig.java的configureMessageConverters及filter-process
     测试方法见/menu/list接口，分别用map和menu对象进行测试，是否将null处理成了""
-    
+### 2.16登陆拦截
+    拦截机制中Aspect、ControllerAdvice、Interceptor、Fliter之间的区别详解 https://www.cnblogs.com/liushuchen/p/10899658.html
+    Spring中的拦截器 —— HandlerInterceptor拦截器 https://www.cnblogs.com/onlymate/p/9563443.html
+    Spring Boot拦截器配置拦截登陆 https://blog.csdn.net/qq_30745307/article/details/80974407
+### 2.17关于时区、时间的显示
+    时间戳：相对于1970年的时间毫秒差；
+    时区：全球共用一个时间戳，因为时区不同，会在将时间戳转换为yyy-mm-dd日期时进行时区的加减，产生了不同的时间。
+    现分为3块，前端，后端，数据库。
+        前端和后端之间用fastjson进行时间转换，所以配置fastjson的日期默认格式和时区。
+            fastjson会获取java.util中的TimeZone的默认时区作为返回给前端的时区
+        后端和数据库使用jdbc做时间转换，在jdbc的url参数设置serverTimezone为本地时区Asia/Shanghai（也是新版jdbc要求配置的）

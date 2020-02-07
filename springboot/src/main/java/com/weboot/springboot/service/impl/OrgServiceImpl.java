@@ -66,4 +66,9 @@ public class OrgServiceImpl implements OrgService {
         }
         return orgId;
     }
+
+    @Override
+    public Org listOrgByOrgId(String orgId) {
+        return orgMapper.selectByPrimaryKey(orgId);
+    }
 }
