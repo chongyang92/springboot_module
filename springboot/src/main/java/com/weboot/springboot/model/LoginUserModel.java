@@ -6,7 +6,6 @@ import com.weboot.springboot.domain.Path;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 public class LoginUserModel {
 

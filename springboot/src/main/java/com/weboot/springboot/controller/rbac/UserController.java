@@ -1,14 +1,11 @@
 package com.weboot.springboot.controller.rbac;
 
-import com.weboot.springboot.controller.param.UserMenuValidator;
-import com.weboot.springboot.controller.param.UserPathValidator;
 import com.weboot.springboot.controller.param.UserValidator;
 import com.weboot.springboot.core.Result;
 import com.weboot.springboot.core.ResultBuilder;
 import com.weboot.springboot.domain.*;
 import com.weboot.springboot.exception.ServiceException;
-import com.weboot.springboot.service.UserMenuService;
-import com.weboot.springboot.service.UserPathService;
+import com.weboot.springboot.mapper.UserRoleMapper;
 import com.weboot.springboot.service.UserService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
@@ -32,12 +29,8 @@ public class UserController {
 
     @Resource
     private UserService userService;
-
     @Resource
-    private UserMenuService userMenuService;
-
-    @Resource
-    private UserPathService userPathService;
+    private UserRoleMapper userRoleMapper;
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public Result listUser(@RequestBody UserValidator userValidator, BindingResult bindingResult) {
@@ -54,8 +47,16 @@ public class UserController {
         user.setLoginFailTimes(0);
         //加密
         user.setPassword(DigestUtils.sha256Hex(user.getPassword()));
-        userService.insertUser(user);
-
+        String userId = userService.insertUser(user);
+        //绑定role
+        if(userValidator.getRoleIds() != null && !userValidator.getRoleIds().isEmpty()) {
+            for (String roleId : userValidator.getRoleIds()) {
+                UserRoleKey userRoleKey = new UserRoleKey();
+                userRoleKey.setUserId(userId);
+                userRoleKey.setRoleId(roleId);
+                userRoleMapper.insert(userRoleKey);
+            }
+        }
         return ResultBuilder.genSuccessResult(user);
     }
 
@@ -82,7 +83,7 @@ public class UserController {
      * @param bindingResult
      * @return
      */
-    @RequestMapping(value = "/addMenus", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/addMenus", method = RequestMethod.POST)
     public Result addMenus(@RequestBody UserMenuValidator userMenuValidator,BindingResult bindingResult){
         List<UserMenuKey> userMenuKeyList = userMenuValidator.genUserMenuKey();
         //对于list需要判断是否为空指针并且是否有值
@@ -94,15 +95,15 @@ public class UserController {
             throw new ServiceException("用户与菜单对应关系不能为空");
         }
         return ResultBuilder.genSuccessResult();
-    }
+    }*/
 
-    @RequestMapping(value = "/listMenus", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/listMenus", method = RequestMethod.POST)
     public Result listMenus(@RequestBody UserMenuValidator userMenuValidator,BindingResult bindingResult){
         List<Menu> menuList = userMenuService.listMenuByUserId(userMenuValidator.getUserId());
         return ResultBuilder.genSuccessResult(menuList);
-    }
+    }*/
 
-    @RequestMapping(value = "/deleteMenus", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/deleteMenus", method = RequestMethod.POST)
     public Result deleteMenus(@RequestBody UserMenuValidator userMenuValidator,BindingResult bindingResult){
         List<UserMenuKey> userMenuKeyList = userMenuValidator.genUserMenuKey();
         //对于list需要判断是否为空指针并且是否有值
@@ -114,7 +115,7 @@ public class UserController {
             throw new ServiceException("无此用户与菜单对应关系");
         }
         return ResultBuilder.genSuccessResult();
-    }
+    }*/
 
     /**
      * 新增用户与路径关系
@@ -122,7 +123,7 @@ public class UserController {
      * @param bindingResult
      * @return
      */
-    @RequestMapping(value = "/addPaths", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/addPaths", method = RequestMethod.POST)
     public Result addPaths(@RequestBody UserPathValidator userPathValidator, BindingResult bindingResult){
         List<UserPathKey> userPathKeyList = userPathValidator.genUserPathKey();
         //对于list需要判断是否为空指针并且是否有值
@@ -134,15 +135,15 @@ public class UserController {
             throw new ServiceException("用户与路径对应关系不能为空");
         }
         return ResultBuilder.genSuccessResult();
-    }
+    }*/
 
-    @RequestMapping(value = "/listPaths", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/listPaths", method = RequestMethod.POST)
     public Result listPaths(@RequestBody UserPathValidator userPathValidator,BindingResult bindingResult){
         List<Path> pathList = userPathService.listPathByUserId(userPathValidator.getUserId());
         return ResultBuilder.genSuccessResult(pathList);
-    }
+    }*/
 
-    @RequestMapping(value = "/deletePaths", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/deletePaths", method = RequestMethod.POST)
     public Result deletePaths(@RequestBody UserPathValidator userPathValidator,BindingResult bindingResult){
         List<UserPathKey> userPathKeyList = userPathValidator.genUserPathKey();
         //对于list需要判断是否为空指针并且是否有值
@@ -154,7 +155,7 @@ public class UserController {
             throw new ServiceException("无此用户与路径对应关系");
         }
         return ResultBuilder.genSuccessResult();
-    }
+    }*/
 }
 
 

@@ -1,10 +1,7 @@
 package com.weboot.springboot.controller.param;
 
-import com.alibaba.fastjson.JSON;
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.weboot.springboot.domain.Menu;
 import com.weboot.springboot.utils.BeanCopierUtils;
-import org.springframework.cglib.beans.BeanCopier;
 
 public class MenuValidator {
     private String menuId;

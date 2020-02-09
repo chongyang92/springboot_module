@@ -62,6 +62,23 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         // addPathPatterns("/**") 表示拦截所有的请求，
         // excludePathPatterns("/login", "/register") 表示除了登陆与注册之外，因为登陆注册不需要登陆也可以访问
-        registry.addInterceptor(loginInterceptor).addPathPatterns("/**").excludePathPatterns("/login","/logout");
+        registry.addInterceptor(loginInterceptor).addPathPatterns("/**")  //拦截所有
+                .excludePathPatterns("/login",         //uri白名单
+                        /*"/user/create",
+                        "/org/create",
+                        "/role/create",
+                        "/perm/create",
+                        "/menu/create",
+                        "/path/create",*/
+
+                        "/user/list",
+                        "/org/list",
+                        "/role/list",
+                        "/perm/list",
+                        "/menu/list",
+                        "/path/list",
+
+                        "/logout");
+
     }
 }

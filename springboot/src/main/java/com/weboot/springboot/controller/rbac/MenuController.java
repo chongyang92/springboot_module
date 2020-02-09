@@ -1,6 +1,5 @@
 package com.weboot.springboot.controller.rbac;
 
-import com.alibaba.fastjson.JSON;
 import com.weboot.springboot.controller.param.MenuValidator;
 import com.weboot.springboot.core.Result;
 import com.weboot.springboot.core.ResultBuilder;
@@ -17,9 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @Validated

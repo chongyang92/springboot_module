@@ -1,7 +1,6 @@
 package com.weboot.springboot.config.intercepors;
 
 import com.weboot.springboot.domain.Path;
-import com.weboot.springboot.domain.User;
 import com.weboot.springboot.exception.ServiceException;
 import com.weboot.springboot.model.LoginUserModel;
 import org.springframework.lang.Nullable;

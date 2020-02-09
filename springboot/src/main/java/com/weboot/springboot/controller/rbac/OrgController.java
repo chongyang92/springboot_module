@@ -1,6 +1,5 @@
 package com.weboot.springboot.controller.rbac;
 
-import com.baidu.fsg.uid.UidGenerator;
 import com.weboot.springboot.controller.param.OrgValidator;
 import com.weboot.springboot.domain.Org;
 import com.weboot.springboot.service.OrgService;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.util.Calendar;
 import java.util.List;
 
 @RestController
@@ -36,9 +34,7 @@ public class OrgController {
 
         Org org = orgValidator.genOrg();
 
-        orgService.insertOrg(org);
-
-        return org.toString();
+        return orgService.insertOrg(org);
     }
 
     @RequestMapping(value = "/edit",method = RequestMethod.POST)

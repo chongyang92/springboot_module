@@ -139,3 +139,5 @@
         前端和后端之间用fastjson进行时间转换，所以配置fastjson的日期默认格式和时区。
             fastjson会获取java.util中的TimeZone的默认时区作为返回给前端的时区
         后端和数据库使用jdbc做时间转换，在jdbc的url参数设置serverTimezone为本地时区Asia/Shanghai（也是新版jdbc要求配置的）
+## 3.rbac模型实现登陆验证，权限管理(菜单、path)
+    

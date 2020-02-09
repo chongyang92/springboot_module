@@ -1,13 +1,17 @@
 package com.weboot.springboot.controller.param;
 
+import com.weboot.springboot.domain.Role;
 import com.weboot.springboot.domain.User;
 import com.weboot.springboot.utils.BeanCopierUtils;
+
+import java.util.List;
 
 public class UserValidator {
     private String userId;
     private String userName;
     private String password;
     private String orgId;
+    private List<String> roleIds;
 
     public String getUserId() {
         return userId;
@@ -39,6 +43,14 @@ public class UserValidator {
 
     public void setOrgId(String orgId) {
         this.orgId = orgId;
+    }
+
+    public List<String> getRoleIds() {
+        return roleIds;
+    }
+
+    public void setRoleIds(List<String> roleIds) {
+        this.roleIds = roleIds;
     }
 
     public User genUser(){

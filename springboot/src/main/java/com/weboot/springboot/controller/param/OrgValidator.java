@@ -4,11 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.weboot.springboot.domain.Org;
 import com.weboot.springboot.utils.BeanCopierUtils;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.cglib.beans.BeanCopier;
 
 import javax.validation.constraints.NotBlank;
-import java.util.Calendar;
-import java.util.Date;
 
 public class OrgValidator {
 
