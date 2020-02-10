@@ -140,4 +140,49 @@
             fastjson会获取java.util中的TimeZone的默认时区作为返回给前端的时区
         后端和数据库使用jdbc做时间转换，在jdbc的url参数设置serverTimezone为本地时区Asia/Shanghai（也是新版jdbc要求配置的）
 ## 3.rbac模型实现登陆验证，权限管理(菜单、path)
+
+## 4.rbac_shiro权限验证 （Shiro入门这篇就够了【Shiro的基础知识、回顾URL拦截】https://www.jianshu.com/p/b5a7312123d9）
+    主要用到四大功能：：认证、授权、会话管理、加密。
+### 4.1shiro功能模块理解
+    认证：对用户名、密码的校验。
+        用户是否存在；
+        密码是否正确；
+    授权：是否拥有资源的权限。
+        该用户是否有权访问XXX菜单；
+        该用户是否有权访问XXX接口(uri)
+    会话管理：使用shiro自带的session会话，不使用Java Servlet的HttpSession
+        每个客户端(应该说浏览器，一台电脑两台浏览器，算是两个客户端)访问时创建一个session;
+        可以对session设置超时时间，用户可以主动关闭session；
+        session里存放用户信息，根据用户信息可以查询拥有的资源；
+    加密：对密码提供多种加密方式，支持加盐(sault)(加密因子)
+### 4.2认证配置 （Springboot整合Shiro：简洁的身份认证： https://www.jianshu.com/p/a711961b07db）
+        1)在pom.xml中添加依赖shiro-spring、shiro-core、shiro-web、shiro-ehcache、shiro-quartz
+        2)在ShiroConfig中，shiro的web过滤器(filter)配置，相当于Spring中的拦截器 —— HandlerInterceptor拦截器
+            2.1)配置SecurityManager安全管理器：所有具体的交互都通过SecurityManager进行控制；它管理着所有Subject、且负责进行认证和授权、及会话、缓存的管理
+                2.1.1)配置ShiroRealm域：数据源，即用户名和密码获取方式，这里是通过userService连接数据库获取
+                    2.1.1.1)继承AuthorizingRealm实现抽象方法doGetAuthenticationInfo，使用传入的userService
+                    获取用户信息
+                    2.1.1.2)配置凭证匹配器：凭证，即密码。就是对于前端传入的密码进行加密的凭证配置，加密完成后，被Authenticator获取后与从数据库获取的进行对比
+            2.2)将SecurityManager设置到运行环境中(并与运行环境中的subject绑定)
+        3)创建用户，存入数据库密码时，使用ShiroPwdEncryptUtil，原理是使用SimpleHash加密。
+        4)认证逻辑
+            4.1)先判断是否上次登陆5次仍失败时记录的时间距离现在是否超过5分钟
+            4.2)将前端传来的用户名、密码传给shiro的UsernamePasswordToken，供置ShiroRealm域获取
+            4.3)从环境中使用SecurityUtils获取subject,如果是被认证过的，则说明已有用户登陆
+            4.4)subject调用login方法并传入token(UsernamePasswordToken产生的)，如果失败，可以捕获各种异常（实际上是让SecurityManager的login方法做的）
+            4.5)用subject的isAuthenticated()方法验证是否登陆成功
+        5)异常处理IncorrectCredentialsException密码不正确、UnknownAccountException账号不存在、AuthenticationException状态不正常
+### 4.3Realm域
+        
+### 4.3授权配置
+        1)在pom.xml中添加依赖shiro-spring、shiro-core、shiro-web、shiro-ehcache、shiro-quartz
+            2.2)配置WebootPathFilter过滤器
+                2.2.1)认证白名单
+                2.2.2)授权白名单
+### 4.3会话管理  
+        2.1.2)配置SessionManager会话处理器
+                2.1.2.1)sessionDao
+                2.1.2.2)会话cookie模板  
+### 4.4缓存会话管理
+    2.1.3)配置cacheManager缓存管理器
     

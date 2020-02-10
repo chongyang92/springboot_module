@@ -13,6 +13,12 @@ import com.weboot.springboot.service.PathService;
 import com.weboot.springboot.service.UserService;
 import com.weboot.springboot.utils.BeanCopierUtils;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,19 +46,9 @@ public class LoginController {
     @Resource
     private UserService userService;
     @Resource
-    private OrgService orgService;
+    private PathService pathService;
     @Resource
-    private UserRoleMapper userRoleMapper;
-    @Resource
-    private RolePermMapper rolePermMapper;
-    @Resource
-    private PermMenuMapper permMenuMapper;
-    @Resource
-    private PermPathMapper permPathMapper;
-    @Resource
-    private MenuMapper menuMapper;
-    @Resource
-    private PathMapper pathMapper;
+    private MenuService menuService;
 
 
     /**
@@ -65,88 +61,58 @@ public class LoginController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result login(@Valid @RequestBody LoginUserValidator loginUser, BindingResult bindingResult) {
         Map<String, Object> result = new HashMap<>();
-        String username = loginUser.getUserName();
+        String userName = loginUser.getUserName();
         String password = loginUser.getPassword();
-        logger.info("login request [ username : {} ]", username);
-        UserExample userExample = new UserExample();
-        UserExample.Criteria cc = userExample.createCriteria();
-        cc.andUserNameEqualTo(username);
-        List<User> userList = userMapper.selectByExample(userExample);
-        if (userList.size() != 1) {
-            throw new ServiceException(username + "无此用户名，请重新输入");
-        }
-        User user = userList.get(0);
-        List<Menu> menuList = new ArrayList<>();
-        List<Path> pathList = new ArrayList<>();
-        Org userOrg = null;
-        LoginUserModel loginUserModel = new LoginUserModel();
-        BeanCopierUtils.copyProperties(user, loginUserModel);
-        LoginUserModel oldLoginUserModel = (LoginUserModel) session.getAttribute("LOGINUSERMODEL_SESSION");
-        //判断是否已登陆
-        if (oldLoginUserModel != null && username.equals(oldLoginUserModel.getUserName())) {
-            throw new ServiceException("用户已登陆");
-        }
-        if(user.getLastLoginTime() != null) {
+        logger.info("login request [ userName : {} ]", userName);
+        LoginUserModel loginUserModel = userService.getLoginUserModelByLoginName(userName);
+        List<Menu> menuList = null;
+        List<Path> pathList = null;
+        User user = userService.getUserByLoginName(userName);
+        //先判断是否上次登陆5次仍失败时记录的时间距离现在是否超过5分钟
+        if (user.getLastLoginTime() != null) {
             System.out.println(new Date().getTime() - user.getLastLoginTime().getTime());
             if (new Date().getTime() - user.getLastLoginTime().getTime() < 300000) {
                 throw new ServiceException("5分钟后再试");
             }
         }
+        //将前端传来的用户名、密码传给shiro
+        UsernamePasswordToken token = new UsernamePasswordToken(userName, password);
 
-        if (user.getUserName().equals(username) && user.getPassword().equals(DigestUtils.sha256Hex(password))) {
-            //放入session中
-            UserRoleExample userRoleExample = new UserRoleExample();
-            UserRoleExample.Criteria uc = userRoleExample.createCriteria();
-            uc.andUserIdEqualTo(user.getUserId());
-            List<UserRoleKey> userRoleKeyList = userRoleMapper.selectByExample(userRoleExample);
-            if(userRoleKeyList != null && !userRoleKeyList.isEmpty()) {
-                for (UserRoleKey userRoleKey : userRoleKeyList) {
-                    RolePermExample rolePermExample = new RolePermExample();
-                    RolePermExample.Criteria rc = rolePermExample.createCriteria();
-                    rc.andRoleIdEqualTo(userRoleKey.getRoleId());
-                    List<RolePermKey> rolePermKeyList = rolePermMapper.selectByExample(rolePermExample);
-                    if(rolePermKeyList != null && !rolePermKeyList.isEmpty()) {
-                        for (RolePermKey rolePermKey : rolePermKeyList) {
-                            PermMenuExample permMenuExample = new PermMenuExample();
-                            PermMenuExample.Criteria mc = permMenuExample.createCriteria();
-                            mc.andPermIdEqualTo(rolePermKey.getPermId());
-                            List<PermMenuKey> permMenuKeyList = permMenuMapper.selectByExample(permMenuExample);
-                            if(permMenuKeyList != null && !permMenuKeyList.isEmpty()){
-                                for (PermMenuKey permMenuKey : permMenuKeyList) {
-                                    Menu menu = menuMapper.selectByPrimaryKey(permMenuKey.getMenuId());
-                                    if(menu != null) {
-                                        menuList.add(menu);
-                                    }
-                                }
-                            }
-                        }
+        //shiro使用subject接收
+        Subject currentUser = SecurityUtils.getSubject();
+        if (currentUser.isAuthenticated()) {
+            System.out.println("当前浏览器已有用户登陆");
 
-                        for (RolePermKey rolePermKey : rolePermKeyList) {
-                            PermPathExample permPathExample = new PermPathExample();
-                            PermPathExample.Criteria ppc = permPathExample.createCriteria();
-                            ppc.andPermIdEqualTo(rolePermKey.getPermId());
-                            List<PermPathKey> permPathKeyList = permPathMapper.selectByExample(permPathExample);
-                            if(permPathKeyList != null && !permPathKeyList.isEmpty()) {
-                                for (PermPathKey permPathKey : permPathKeyList) {
-                                    Path path = pathMapper.selectByPrimaryKey(permPathKey.getPathId());
-                                    if(path != null) {
-                                        pathList.add(path);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            userOrg = orgService.listOrgByOrgId(user.getOrgId());
+            return ResultBuilder.genFailResult("当前浏览器已有用户登陆，请退出浏览器重新登陆");
+        }
+        try {
+            currentUser.login(token);
+        } catch (IncorrectCredentialsException ice) {
+            throw new ServiceException("密码不正确");
+        } catch (UnknownAccountException uae) {
+            throw new ServiceException("账号不存在");
+        } catch (AuthenticationException ae) {
+            throw new ServiceException("状态不正常");
+        }
+        if (currentUser.isAuthenticated()) {
+            System.out.println("认证成功");
+            menuList = menuService.getMenuListByUserId(user.getUserId());
+            pathList = pathService.getPathListByUserId(user.getUserId());
             loginUserModel.setUserMenuList(menuList);
             loginUserModel.setUserPathList(pathList);
-            loginUserModel.setUserOrg(userOrg);
-            if(user.getLoginFailTimes() != 0) {
+
+            if (user.getLoginFailTimes() != 0) {
                 user.setLoginFailTimes(0);
             }
-            session.setAttribute("LOGINUSERMODEL_SESSION", loginUserModel);
+
+            result.put("user",user);
+
+            result.put("menulist",menuList);
+            result.put("pathlist",pathList);
+            userService.editUser(user);
+            return ResultBuilder.genSuccessResult(result);
         } else {
+            token.clear();
             if (user.getLoginFailTimes() < 5) {
                 user.setLoginFailTimes(user.getLoginFailTimes() + 1);
                 user.setLastLoginTime(new Date());
@@ -158,12 +124,6 @@ public class LoginController {
             }
             throw new ServiceException("用户名或密码错误");
         }
-        result.put("user", user);
-
-        result.put("menulist", menuList);
-        result.put("pathlist", pathList);
-        userService.editUser(user);
-        return ResultBuilder.genSuccessResult(result);
     }
 
     /**
@@ -173,11 +133,30 @@ public class LoginController {
      */
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public Result logout() {
-        LoginUserModel loginUserModel = (LoginUserModel) session.getAttribute("LOGINUSERMODEL_SESSION");
-        if (loginUserModel == null) {
-            return ResultBuilder.genSuccessResult("该用户未登陆");
+        return handlerLogout();
+    }
+
+    /**
+     * 退出登陆
+     *
+     * @return
+     */
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public Result logoutGet() {
+        return handlerLogout();
+    }
+
+    /**
+     * 退出登陆实现
+     *
+     * @return
+     */
+    private Result handlerLogout() {
+        logger.info("logout request");
+        Subject subject = SecurityUtils.getSubject();
+        if (subject.isAuthenticated()) {
+            subject.logout();
         }
-        session.removeAttribute("LOGINUSERMODEL_SESSION");
-        return ResultBuilder.genSuccessResult(loginUserModel.getUserName() + "登出成功");
+        return ResultBuilder.genSuccessResult();
     }
 }

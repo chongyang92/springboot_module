@@ -9,4 +9,5 @@ public interface MenuService {
     String insertMenu(Menu menu);
     String editMenu(Menu menu);
     String deleteMenu(String menuId);
+    List<Menu> getMenuListByUserId(String userId);
 }

@@ -3,8 +3,8 @@ package com.weboot.springboot.controller.rbac;
 import com.weboot.springboot.controller.param.UserValidator;
 import com.weboot.springboot.core.Result;
 import com.weboot.springboot.core.ResultBuilder;
+import com.weboot.springboot.core.shiro.ShiroPwdEncryptUtil;
 import com.weboot.springboot.domain.*;
-import com.weboot.springboot.exception.ServiceException;
 import com.weboot.springboot.mapper.UserRoleMapper;
 import com.weboot.springboot.service.UserService;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -46,7 +46,8 @@ public class UserController {
         User user = userValidator.genUser();
         user.setLoginFailTimes(0);
         //加密
-        user.setPassword(DigestUtils.sha256Hex(user.getPassword()));
+        /*user.setPassword(DigestUtils.sha256Hex(user.getPassword()));*/
+
         String userId = userService.insertUser(user);
         //绑定role
         if(userValidator.getRoleIds() != null && !userValidator.getRoleIds().isEmpty()) {

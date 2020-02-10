@@ -9,4 +9,5 @@ public interface PathService {
     String insertPath(Path path);
     String editPath(Path path);
     String deletePath(String pathId);
+    List<Path> getPathListByUserId(String userId);
 }
