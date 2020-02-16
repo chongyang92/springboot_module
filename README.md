@@ -147,7 +147,7 @@
     认证：对用户名、密码的校验。
         用户是否存在；
         密码是否正确；
-    授权：是否拥有资源的权限。
+    授权：给身份认证通过的人授予它可以访问某些资源的权限。
         该用户是否有权访问XXX菜单；
         该用户是否有权访问XXX接口(uri)
     会话管理：使用shiro自带的session会话，不使用Java Servlet的HttpSession
@@ -155,6 +155,12 @@
         可以对session设置超时时间，用户可以主动关闭session；
         session里存放用户信息，根据用户信息可以查询拥有的资源；
     加密：对密码提供多种加密方式，支持加盐(sault)(加密因子)
+    shiro流程：浏览器发来uri请求，服务器通过shiro过滤器对一切uri进行拦截校验，对/login和logout应该直接放行。
+    认证阶段：shiro首先判断当前浏览器传入的jsessionid是否存在，
+        存在时，说明当前浏览器已有用户登陆(自己或其他用户)，
+        不存在，当前浏览器无登陆用户，因为/login直接放行,进入到controller进行登陆判断
+    授权阶段，shiro首先判断当前浏览器传入的jsessionid是否存在
+    过滤器里有判断
 ### 4.2认证配置 （Springboot整合Shiro：简洁的身份认证： https://www.jianshu.com/p/a711961b07db）
         1)在pom.xml中添加依赖shiro-spring、shiro-core、shiro-web、shiro-ehcache、shiro-quartz
         2)在ShiroConfig中，shiro的web过滤器(filter)配置，相当于Spring中的拦截器 —— HandlerInterceptor拦截器
@@ -172,13 +178,22 @@
             4.4)subject调用login方法并传入token(UsernamePasswordToken产生的)，如果失败，可以捕获各种异常（实际上是让SecurityManager的login方法做的）
             4.5)用subject的isAuthenticated()方法验证是否登陆成功
         5)异常处理IncorrectCredentialsException密码不正确、UnknownAccountException账号不存在、AuthenticationException状态不正常
-### 4.3Realm域
-        
+        注：处理逻辑放在了Controller，的登陆接口/login中
 ### 4.3授权配置
-        1)在pom.xml中添加依赖shiro-spring、shiro-core、shiro-web、shiro-ehcache、shiro-quartz
-            2.2)配置WebootPathFilter过滤器
-                2.2.1)认证白名单
-                2.2.2)授权白名单
+        整体流程：在资源未请求到controller之前，对资源进行过滤,一般自定义过滤器，对于过滤的是资源是菜单/path/按钮，需要自定义permission，然后通过realm获取数据库中正确的资源信息进行对比。
+        自定义过滤器:判断当前浏览器是否有用户登陆，如果有，再通过realm获取正确的数据，进行比对，没有直接返回需要登陆。
+        自定义permission：定义授权的对象是什么，比如授权path,那么属性就有method和uri。
+        注：处理逻辑放在了过滤器中，因为需要在执行到controller之前进行处理
+        在没有shiro时，使用的是拦截器，即在执行到controller之前，将资源和httpsession里的授权资源进行对比对比成功，才放行，继续执行Controller          
+### 4.4Realm域
+        ShiroRealm，这是个自定义的认证类，继承自AuthorizingRealm，负责用户的认证和权限的处理，可以参考JdbcRealm的实现。
+        认证：该处理是从前端拿到用户名，然后根据用户名从数据库拿到用户信息，放到规定的AuthenticationInfo，作为数据源，让Authenticator获取，然后与前端获取的用户名密码做对比。
+        授权：该处理是从PrincipalCollection获取用户信息，然后根据用户ID到数据库读取授权信息，放到规定的AuthorizationInfo，作为数据源，让Authorizator获取，然后与前端获取的url做对比。
+        注: 在没有shiro时，LoginController里将用户和权限信息在登陆的时候，就会保存到httpsession会话属性中，待拦截器获取。
+### 4.5 ShiroConfigEntity这个配置类里的变量名是和shiro-config.properties对应的，当写入信息到shiro-config.properties，会在启动springboot的时候读取到ShiroConfigEntity类中
+### 4.5缓存（ehcache/redis）
+    用户登陆成功后，把用户信息和权限信息缓存起来，然后每次用户请求时，放入用户的session中，如果不设置这个bean，每个请求都会查询一次数据库。
+    shiro-all默认集成了ehcache的配置文件,也可以添加配置
 ### 4.3会话管理  
         2.1.2)配置SessionManager会话处理器
                 2.1.2.1)sessionDao
@@ -186,3 +201,10 @@
 ### 4.4缓存会话管理
     2.1.3)配置cacheManager缓存管理器
     
+## 5总结
+    学完整个shiro配置之后关于配置的总结
+### 5.1 Config配置类
+    使用@Configuration注解一个类表明该类可以被Spring IoC容器用作bean定义的来源
+    1)@Configuration和@bean注解要配合，缺一不可
+    2)@Bean()重新起名
+    3)IOC依赖注入的理解https://blog.csdn.net/javazejian/article/details/54561302

@@ -35,5 +35,28 @@ public class ResultBuilder {
                 .setMessage(message);
     }
 
+    /**
+     * 未认证结果
+     *
+     * @param message
+     * @return
+     */
+    public static Result genUnauthorizedResult(String message) {
+        return new Result()
+                .setCode(ResultCode.UNAUTHORIZED)
+                .setMessage(message);
+    }
+
+    /**
+     * 未授权结果
+     *
+     * @param message
+     * @return
+     */
+    public static Result genForbiddenResult(String message) {
+        return new Result()
+                .setCode(ResultCode.FORBIDDEN)
+                .setMessage(message);
+    }
 
 }

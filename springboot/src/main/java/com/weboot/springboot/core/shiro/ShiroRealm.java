@@ -1,10 +1,12 @@
 package com.weboot.springboot.core.shiro;
 
+import com.weboot.springboot.domain.Path;
 import com.weboot.springboot.model.LoginUserModel;
 import com.weboot.springboot.service.PathService;
 import com.weboot.springboot.service.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -12,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /*AuthenticatingRealm-------->用于认证方法的Realm
  *AuthorizingRealm--------->用于授权和认证的realm一般使用这个
@@ -25,16 +28,26 @@ public class ShiroRealm extends AuthorizingRealm {
     private UserService userService;*/
 
     private UserService userService;
+    private PathService pathService;
 
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
+    public void setPathService(PathService pathService){this.pathService = pathService;}
 
     //获取授权相关信息
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-
-        return null;
+        LoginUserModel loginUserModel = (LoginUserModel) principalCollection.getPrimaryPrincipal();
+        String userId = loginUserModel.getUserId();
+        List<Path> pathList = pathService.getPathListByUserId(userId);
+        SimpleAuthorizationInfo sa = new SimpleAuthorizationInfo();
+        if(pathList != null && !pathList.isEmpty()){
+            for(Path path : pathList) {
+                sa.addObjectPermission(new ShiroPathPermission(path.getHttpMethodType(),path.getHttpPath()));
+            }
+        }
+        return sa;
     }
 
     //提供获取认证相关信息供Authenticator获取后和前端token(用户名、密码)做判断
