@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getUserlist(User user) {
+        logger.info("user/list被调用了");
         UserExample userExample = new UserExample();
         UserExample.Criteria cc = userExample.createCriteria();
         if (StringUtils.isNotBlank(user.getUserId())) {

@@ -51,7 +51,7 @@
 ### 2.1validation国际化
     https://blog.csdn.net/qq78442761/article/details/88388787
     设置IDEA中properties文件显示中文https://www.cnblogs.com/shaohsiung/p/9581077.html
-    https://blog.csdn.net/GAOXINXINGgaoxinxing/article/details/92642470
+    重点：Spring:validate和messages消息加载机制及国际化解决方案 https://blog.csdn.net/GAOXINXINGgaoxinxing/article/details/92642470
     http://miao.blog/article/spring-boot-validator-i18n
 ### 2.2create_time和update_time很多表都有，统一管理
     在建表时设置
@@ -77,6 +77,7 @@
     使用fastjson的JSON.toJSONString来重写与其他系统交互时传递的core类里的toString方法
     引入fastjson
     使用注意事项https://segmentfault.com/a/1190000021287520 把常用序列化属性都写上了
+    Idea快捷生成serialVersionUID https://www.cnblogs.com/huanshilang/p/11578694.html
 ### 2.7通过jad反编译工具理解枚举
     深入理解枚举https://blog.csdn.net/javazejian/article/details/71333103
     安装jad 步骤文档：jad配置到idea的external tools中.note
@@ -191,9 +192,18 @@
         授权：该处理是从PrincipalCollection获取用户信息，然后根据用户ID到数据库读取授权信息，放到规定的AuthorizationInfo，作为数据源，让Authorizator获取，然后与前端获取的url做对比。
         注: 在没有shiro时，LoginController里将用户和权限信息在登陆的时候，就会保存到httpsession会话属性中，待拦截器获取。
 ### 4.5 ShiroConfigEntity这个配置类里的变量名是和shiro-config.properties对应的，当写入信息到shiro-config.properties，会在启动springboot的时候读取到ShiroConfigEntity类中
-### 4.5缓存（ehcache/redis）
+### 4.6缓存（ehcache/redis）
     用户登陆成功后，把用户信息和权限信息缓存起来，然后每次用户请求时，放入用户的session中，如果不设置这个bean，每个请求都会查询一次数据库。
-    shiro-all默认集成了ehcache的配置文件,也可以添加配置
+    shiro-all默认集成了ehcache的配置文件,也可以添加配置.
+    理解
+        1)springboot集成shiro的ehcache的时候，要先集成ehcache然后再将ehcache设置为共享，共享给shiro,这样当shiro配置cacheManager的时候就可以直接使用了
+        2)设置realm为开启缓存，并指定缓存名称(shiro-ehcache.xml)，
+        3)缓存清空
+          如果用户正常退出，缓存自动清空。
+          如果用户非正常退出，缓存自动清空。（现在版本的shiro都是支持这个的，所以这个我们不用管了）
+    springboot集成ehcache https://blog.csdn.net/hudchsdi/article/details/93770226
+    springboot集成shiro-ehcache，配置权限缓存与系统本身集成的ehcache缓存冲突  https://blog.csdn.net/AI_jqy/article/details/90042021
+    springboot整合shiro-ehcache缓存 https://blog.csdn.net/qq_34021712/article/details/80309246
 ### 4.3会话管理  
         2.1.2)配置SessionManager会话处理器
                 2.1.2.1)sessionDao

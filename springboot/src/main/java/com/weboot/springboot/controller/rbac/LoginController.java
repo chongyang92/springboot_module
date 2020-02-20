@@ -22,6 +22,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,6 +50,7 @@ public class LoginController {
     private PathService pathService;
     @Resource
     private MenuService menuService;
+
 
 
     /**
@@ -123,6 +125,7 @@ public class LoginController {
                 throw new ServiceException("5分钟后再试");
             }
             throw new ServiceException("用户名或密码错误");
+
         }
     }
 

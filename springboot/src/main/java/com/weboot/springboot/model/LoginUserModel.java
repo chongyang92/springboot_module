@@ -4,10 +4,13 @@ import com.weboot.springboot.domain.Menu;
 import com.weboot.springboot.domain.Org;
 import com.weboot.springboot.domain.Path;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class LoginUserModel {
+public class LoginUserModel implements Serializable {
+
+    private static final long serialVersionUID = -5245466291421564088L;
 
     private String userId;
 

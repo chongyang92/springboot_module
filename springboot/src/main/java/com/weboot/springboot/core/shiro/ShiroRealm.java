@@ -38,6 +38,7 @@ public class ShiroRealm extends AuthorizingRealm {
     //获取授权相关信息
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+        System.out.println("AuthorizationInfo授权");
         LoginUserModel loginUserModel = (LoginUserModel) principalCollection.getPrimaryPrincipal();
         String userId = loginUserModel.getUserId();
         List<Path> pathList = pathService.getPathListByUserId(userId);
@@ -53,6 +54,7 @@ public class ShiroRealm extends AuthorizingRealm {
     //提供获取认证相关信息供Authenticator获取后和前端token(用户名、密码)做判断
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
+        System.out.println("AuthenticationInfo认证");
         //获取登陆名称
         String loginName = (String)authenticationToken.getPrincipal();
         //根据登陆名去数据库查询用户信息

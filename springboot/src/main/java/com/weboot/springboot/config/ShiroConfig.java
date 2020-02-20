@@ -1,5 +1,6 @@
 package com.weboot.springboot.config;
 
+import com.weboot.springboot.config.entity.ShiroConfigEntity;
 import com.weboot.springboot.core.ProjectConstant;
 import com.weboot.springboot.core.ResultBuilder;
 import com.weboot.springboot.core.shiro.ShiroPathFilter;
@@ -10,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.CacheManager;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.SessionListener;
 import org.apache.shiro.session.mgt.SessionManager;
@@ -24,9 +26,11 @@ import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
 import javax.annotation.Resource;
@@ -41,6 +45,9 @@ public class ShiroConfig {
     private UserService userService;
     @Resource
     private PathService pathService;
+
+    @Autowired
+    private ShiroConfigEntity shiroConfig;
     /**
      * 配置WebootPathFilter过滤器
      * @return
@@ -106,11 +113,24 @@ public class ShiroConfig {
      * @return
      */
     @Bean
-    public SecurityManager securityManager(){
+    public SecurityManager securityManager(CacheManager cacheManager){
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(webootRealm());
+        securityManager.setCacheManager(cacheManager);
         return securityManager;
     }
+
+    /**
+     * shiro缓存管理器;
+     * 需要添加到securityManager中
+     * @return
+     */
+    /*@Bean
+    public EhCacheManager ehCacheManager(){
+        EhCacheManager cacheManager = new EhCacheManager();
+        cacheManager.setCacheManagerConfigFile("classpath:shiro-ehcache.xml");
+        return cacheManager;
+    }*/
 
     /**
      * 配置WebootRealm域
@@ -122,6 +142,11 @@ public class ShiroConfig {
         webootRealm.setUserService(userService);
         webootRealm.setPathService(pathService);
         webootRealm.setCredentialsMatcher(credentialsMatcher());//设置凭证器
+        webootRealm.setCachingEnabled(true);
+        webootRealm.setAuthenticationCachingEnabled(true);
+        webootRealm.setAuthenticationCacheName(shiroConfig.getAuthenticationCacheName());
+        webootRealm.setAuthorizationCachingEnabled(true);
+        webootRealm.setAuthorizationCacheName(shiroConfig.getAuthorizationCacheName());
         return webootRealm;
     }
 
