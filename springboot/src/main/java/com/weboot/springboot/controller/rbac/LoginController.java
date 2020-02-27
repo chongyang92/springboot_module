@@ -12,6 +12,7 @@ import com.weboot.springboot.service.OrgService;
 import com.weboot.springboot.service.PathService;
 import com.weboot.springboot.service.UserService;
 import com.weboot.springboot.utils.BeanCopierUtils;
+import com.weboot.springboot.utils.MessageSourceUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -50,7 +51,8 @@ public class LoginController {
     private PathService pathService;
     @Resource
     private MenuService menuService;
-
+    @Autowired
+    private MessageSourceUtil messageSourceUtil;
 
 
     /**
@@ -90,7 +92,8 @@ public class LoginController {
         try {
             currentUser.login(token);
         } catch (IncorrectCredentialsException ice) {
-            throw new ServiceException("密码不正确");
+            //throw new ServiceException("密码不正确");
+            throw new ServiceException(messageSourceUtil.getMessage("login_username_password_error"));
         } catch (UnknownAccountException uae) {
             throw new ServiceException("账号不存在");
         } catch (AuthenticationException ae) {
@@ -106,7 +109,7 @@ public class LoginController {
             if (user.getLoginFailTimes() != 0) {
                 user.setLoginFailTimes(0);
             }
-
+            currentUser.getSession().setAttribute("LANGUAGE_TYPE","en");
             result.put("user",user);
 
             result.put("menulist",menuList);
@@ -124,8 +127,8 @@ public class LoginController {
                 userService.editUser(user);
                 throw new ServiceException("5分钟后再试");
             }
-            throw new ServiceException("用户名或密码错误");
-
+            //throw new ServiceException("用户名或密码错误");
+            throw new ServiceException(messageSourceUtil.getMessage("login_username_password_error"));
         }
     }
 
