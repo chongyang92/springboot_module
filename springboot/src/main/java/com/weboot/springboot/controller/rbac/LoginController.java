@@ -11,6 +11,7 @@ import com.weboot.springboot.service.MenuService;
 import com.weboot.springboot.service.OrgService;
 import com.weboot.springboot.service.PathService;
 import com.weboot.springboot.service.UserService;
+import com.weboot.springboot.type.ResultCode_Two_Param;
 import com.weboot.springboot.utils.BeanCopierUtils;
 import com.weboot.springboot.utils.MessageSourceUtil;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -114,6 +115,7 @@ public class LoginController {
 
             result.put("menulist",menuList);
             result.put("pathlist",pathList);
+            //result.put("EnumTest", ResultCode_Two_Param.MYSUCCESS.getDesc());
             userService.editUser(user);
             return ResultBuilder.genSuccessResult(result);
         } else {
