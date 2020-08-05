@@ -218,3 +218,35 @@
     1)@Configuration和@bean注解要配合，缺一不可
     2)@Bean()重新起名
     3)IOC依赖注入的理解https://blog.csdn.net/javazejian/article/details/54561302
+    
+### 6.1activiti工作流
+#### 6.1.1初识activiti
+    
+    https://blog.csdn.net/zxxz5201314/article/details/103166771?spm=a2c4e.10696291.0.0.577e19a4IjJWFd
+    关于H2database https://blog.csdn.net/chenhao_c_h/article/details/80332260
+    dependencies与dependencyManagement的是干嘛的 https://blog.csdn.net/liutengteng130/article/details/46991829
+    关于activiti-spring-boot-starter 的说明https://www.jianshu.com/p/d2075b17bf38
+    srpingboot +shiro + activiti model集成注意点 https://www.jianshu.com/p/70901f745927
+    关于transactionManager 事务https://my.oschina.net/wjme/blog/1439364
+    配置结果为ActivitiConfig，运行后数据库自动生成25张表
+####6.1.2 初识25张表
+    Activiti数据库表结构(表详细版) https://blog.csdn.net/hj7jay/article/details/51302829
+    Java Activiti(3)--数据库说明 https://blog.csdn.net/lovoo/article/details/78187078
+    【Activiti7】数据库表介绍 https://blog.csdn.net/zhouchenjun001/article/details/103629559
+####6.1.3 bpm画图(流程定义)
+    bpm的理解 https://blog.csdn.net/qq_35463719/article/details/82967287
+    idea actiBPM插件生成png文件 (解决没有Diagrams或Designer选项问题) https://www.cnblogs.com/jpfss/p/11091376.html
+####6.1.4 Activiti核心详解
+    Activiti7的核心详解 https://segmentfault.com/a/1190000021129168
+####6.1.5 activiti整体开发流程说明 https://blog.csdn.net/Marion158/article/details/87728172 
+    1）activiti 部署流程定义的各种方式 
+        https://blog.csdn.net/ctwy291314/article/details/81285408
+        https://blog.csdn.net/qq_32541407/article/details/76768651
+        Activiti流程文件部署过程解析 https://www.jb51.net/article/182240.htm
+        流程管理定义（查看流程图附件） https://blog.csdn.net/qq_20042935/article/details/97899062
+    2）启动流程
+        Activiti流程实例启动 开启流程实例 https://blog.csdn.net/zlt995768025/article/details/78350296
+        流程启动的相关操作 https://blog.csdn.net/changqi008/article/details/83033956
+    3）流程变量
+        流程变量的设置与应用 https://blog.csdn.net/changqi008/article/details/83040888
+        Activiti工作流之流程变量 https://blog.csdn.net/ip_JL/article/details/83684023

@@ -34,4 +34,9 @@ public final class ProjectConstant {
      * 解密数据库连接密码beanName
      */
     public static final String DECRYPT_DATASOURCE_PSW_BEAN_NAME = "decryptDataSourcePwd";
+
+    /**
+     * 审批流程定义KEY
+     */
+    public static final String WORKFLOW_DEF_KEY = "myProcess_helloworld";
 }

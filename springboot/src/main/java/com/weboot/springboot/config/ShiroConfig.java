@@ -97,6 +97,19 @@ public class ShiroConfig {
         //配置退出过滤器logout，shiro已经实现
         filterChainMap.put("/logout","anon");
         filterChainMap.put("/login","anon");
+        filterChainMap.put("/authFlow/procdef/list","anon");
+        filterChainMap.put("/authFlow/procdef/diagram","anon");
+        filterChainMap.put("/authFlow/procdef/startAuthWorkflow","anon");
+        filterChainMap.put("/authFlow/procdef/pendingTask/list","anon");
+        filterChainMap.put("/authFlow/procdef/completeTask","anon");
+        filterChainMap.put("/authFlow/procdef/queryProinsatanceState","anon");
+        filterChainMap.put("/authFlow/procdef/historyTask/list","anon");
+        filterChainMap.put("/authFlow/suspendOrActivateProcessInstance","anon");
+        filterChainMap.put("/authFlow/suspendOrActivateSingleProcessInstance","anon");
+        filterChainMap.put("/authFlow/procdef/startAuthWorkflow_Object","anon");
+        filterChainMap.put("/authFlow/procdef/completeTaskGlobalVar","anon");
+
+
         //过滤链定义，从上向下顺序执行，一般将/**放在最为下边 :这是一个坑呢，一不小心代码就不好使了;
         //authc:所有url都必须认证通过才可以访问,即，必须先登陆; anon:所有url都都可以匿名访问,先配置anon再配置authc
         //filterChainMap.put("/**", "authc,webootPathFilter");//先验证所有uri先验证是否有用户登陆，然后验证是否有权限，但是这里没有对authc这个过滤器自定义，所以没办法返回自定义认证错误
