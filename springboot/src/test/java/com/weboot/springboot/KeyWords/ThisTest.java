@@ -1,5 +1,6 @@
 package com.weboot.springboot.KeyWords;
 
+//this 代表当前对象
 class A{
     private String s = "A";
     void print(){

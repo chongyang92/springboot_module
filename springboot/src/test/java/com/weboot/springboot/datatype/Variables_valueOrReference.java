@@ -6,13 +6,21 @@ package com.weboot.springboot.datatype;
 *   2.2引用数据类型(包括对象、数组、接口)作为参数传递时，是把对象在内存中的地址拷贝了一份传给了参数；（例如StringBuffer、StringBuilder，是否指向了新申请的内存）
     2.3基本数据类型的封装类包括String、Integer、Short、Float、Double、Long、Boolean、Byte、Character虽然是引用类型，但它们在作为参数传递时，也和基本数据类型一样，是值传递
  */
-public class Variables {
+public class Variables_valueOrReference {
+
+    //构造方法需要为public方便别的包创建对象
+    public Variables_valueOrReference(){
+        System.out.println("Variables_valueOrReference structure");
+    }
+
     //类变量——也叫静态变量；
     //独立于方法之外的变量，用static修饰；
     //用类名调用Variables.classVariable
-    private static String classVariable;
-    private static Integer baseClassValibaleInteger;
+    public static String classVariable = "466";
+    private static Integer baseClassValibaleInteger = 000;
     private static int baseClassValibale;
+    //
+    protected static int protectedValibale;
 
     //成员变量——也叫实例变量
     //独立于方法之外的变量，没有static修饰
@@ -31,9 +39,9 @@ public class Variables {
     }
 
     //传值还是传地址，此处传对象的地址，改掉了age的值，结果为44
-    private Variables setAge(Variables variablesAge){
-        variablesAge.age = 44;
-        return variablesAge;
+    private Variables_valueOrReference setAge(Variables_valueOrReference variablesValueOrReferenceAge){
+        variablesValueOrReferenceAge.age = 44;
+        return variablesValueOrReferenceAge;
     }
 
     //传的是值
@@ -71,49 +79,49 @@ public class Variables {
 
     public static void main(String[] args) {
         System.out.println("classVariable:"+classVariable);
-        System.out.println("Variables.classVariable:"+Variables.classVariable);
-        System.out.println(new Variables().age);
-        new Variables().getAge(3);
-        System.out.println(new Variables().getD(4));
+        System.out.println("Variables.classVariable:"+ Variables_valueOrReference.classVariable);
+        System.out.println(new Variables_valueOrReference().age);
+        new Variables_valueOrReference().getAge(3);
+        System.out.println(new Variables_valueOrReference().getD(4));
 
         //传值还是传地址——传地址
-        Variables variables = new Variables();
-        variables.age = 4;
-        System.out.println("before age:"+variables.age);
-        variables.setAge(variables);
-        System.out.println("after age 传地址:"+variables.age);
+        Variables_valueOrReference variablesValueOrReference = new Variables_valueOrReference();
+        variablesValueOrReference.age = 4;
+        System.out.println("before age:"+ variablesValueOrReference.age);
+        variablesValueOrReference.setAge(variablesValueOrReference);
+        System.out.println("after age 传地址:"+ variablesValueOrReference.age);
         int ageV = 5;
-        variables.setAge(ageV);
+        variablesValueOrReference.setAge(ageV);
         System.out.println("ageV 传值:"+ageV);
         int ageInteger = 6;
-        variables.setAgeInteger(ageInteger);
+        variablesValueOrReference.setAgeInteger(ageInteger);
         System.out.println("ageInteger 传值:"+ageInteger);
         Integer integer = new Integer(7);
-        variables.setAgeInteger(integer);
+        variablesValueOrReference.setAgeInteger(integer);
         System.out.println("integer 传对象:"+integer);
 
         String string = "string";
-        variables.foo(string);
+        variablesValueOrReference.foo(string);
         System.out.println("字符串传值还是传地址："+string);
 
         String stringConcat = new String("stringConcat");
-        variables.fooConcat(stringConcat);
+        variablesValueOrReference.fooConcat(stringConcat);
         System.out.println("字符串传值还是传地址stringConcat："+stringConcat);
 
         StringBuffer stringBuffer = new StringBuffer("123");
-        variables.fooStringBuffer(stringBuffer);
+        variablesValueOrReference.fooStringBuffer(stringBuffer);
         System.out.println("stringBuffer:"+stringBuffer);
 
         //重点,stringBufferNew和str都指向了同一块内存456，方法中str指向变了，但是stringBufferNew指向没有变；
         StringBuffer stringBufferNew = new StringBuffer("456");
-        variables.fooStringBufferNew(stringBufferNew);
+        variablesValueOrReference.fooStringBufferNew(stringBufferNew);
         System.out.println("stringBufferNew:"+stringBufferNew);
 
         //重点,fooStringBufferNewReturn和str都指向了同一块内存4567，方法中str指向变了，但是stringBufferNew指向没有变；
         StringBuffer fooStringBufferNewReturn = new StringBuffer("4567");
-        variables.fooStringBufferNewReturn(fooStringBufferNewReturn);
+        variablesValueOrReference.fooStringBufferNewReturn(fooStringBufferNewReturn);
         System.out.println("fooStringBufferNewReturn before:"+fooStringBufferNewReturn);
-        fooStringBufferNewReturn = variables.fooStringBufferNewReturn(fooStringBufferNewReturn);
+        fooStringBufferNewReturn = variablesValueOrReference.fooStringBufferNewReturn(fooStringBufferNewReturn);
         System.out.println("fooStringBufferNewReturn after:"+fooStringBufferNewReturn);
     }
 }
