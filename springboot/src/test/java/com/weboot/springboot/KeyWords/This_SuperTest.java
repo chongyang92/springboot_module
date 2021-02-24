@@ -21,8 +21,17 @@ class A{
     public String test(){
         return "test_A";
     }
+    protected String testStr(String str){
+        return "test_AStr";
+    }
+    protected String testStr(Integer str){
+        return "test_AStr";
+    }
 }
 class B extends A{
+    protected String testStr(String str){
+        return "test_AStr";
+    }
     public B(String str){
         this();
         //super();//此处如果不写，默认为super();，所以父类A中必须要有无参构造方法

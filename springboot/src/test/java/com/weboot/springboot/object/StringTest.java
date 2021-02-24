@@ -37,7 +37,7 @@ public class StringTest {
          * 值已经是确定的了，编译期已经知道，所以相当于""+""，这种情况下，返回的就是常量池里的引用。
          */
 
-        new StringTest().test14();
+        new StringTest().test10();
     }
 
     /**
@@ -225,5 +225,11 @@ public class StringTest {
         System.out.println("===========test14============");
         System.out.println(a);
         //System.out.println("ee".intern());
+    }
+
+    public void test15(){
+        StringBuilder stringBuilder = new StringBuilder("445");
+        StringBuffer stringBuffer = new StringBuffer("678");
+
     }
 }

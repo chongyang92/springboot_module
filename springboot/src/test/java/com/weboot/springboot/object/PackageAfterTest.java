@@ -1,4 +1,8 @@
 package com.weboot.springboot.object;
+
+import java.util.ArrayList;
+import java.util.List;
+
 //封装
 //1、成员变量私有化
 //2、set方法中对传入参数校验(非空等正则验证)、或统一修改(相对于修改一百处 name = 30)；重点在于更深层次的定制

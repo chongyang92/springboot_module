@@ -1,7 +1,5 @@
 package com.weboot.springboot.KeyWords;
 
-import org.omg.PortableInterceptor.INACTIVE;
-
 /**final关键字可以用来修饰类、方法和变量（包括成员变量和局部变量），只能被赋值一次*/
 //修饰成员变量:常量，在定义时初始化，或者在构造方法中初始化
 //修饰局部变量：局部常量，一般是方法的参数final，不能被改变
