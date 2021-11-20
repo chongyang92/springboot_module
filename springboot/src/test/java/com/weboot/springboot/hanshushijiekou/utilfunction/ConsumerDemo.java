@@ -1,5 +1,7 @@
 package com.weboot.springboot.hanshushijiekou.utilfunction;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.function.Consumer;
 
 public class ConsumerDemo {
@@ -7,7 +9,6 @@ public class ConsumerDemo {
         /*operatorString("林青霞",(String s) ->{
             System.out.println(s);
         });*/
-
         /*operatorString("林青霞",s -> System.out.println(s));
         operatorString("林青霞",System.out::println);
         operatorString("林青霞",s -> {

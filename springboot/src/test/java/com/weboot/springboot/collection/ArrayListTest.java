@@ -6,7 +6,6 @@ import java.util.LinkedList;
 public class ArrayListTest {
     public static void main(String[] args) {
         ArrayList<String> arrayList = new ArrayList<>();
-        Long
         arrayList.add("hello");
         arrayList.add("world");
         arrayList.add("java");

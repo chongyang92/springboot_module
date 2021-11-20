@@ -11,3 +11,7 @@ public class Generic<T> {
         this.t = t;
     }
 }
+
+
+
+class MM<T,E> extends Generic<T>{}
